@@ -5,6 +5,10 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "I2C to MIDI", "I2C to MIDI\I2C to MIDI.vcxproj", "{C5F80730-F44F-4478-BDAE-6634EFC2CA88}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Basic_IO", "..\..\..\Arduino\My Examples\Basic_IO\Basic_IO.vcxproj", "{47300C33-0C86-4916-85B7-DC00FAB27304}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Adafruit_NeoPixel", "..\..\..\Arduino\libraries\Adafruit_NeoPixel\Adafruit_NeoPixel.vcxitems", "{A9CBE24D-469B-4F4F-BF8D-9707B7FF25E4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -15,6 +19,10 @@ Global
 		{C5F80730-F44F-4478-BDAE-6634EFC2CA88}.Debug|x86.Build.0 = Debug|Win32
 		{C5F80730-F44F-4478-BDAE-6634EFC2CA88}.Release|x86.ActiveCfg = Release|Win32
 		{C5F80730-F44F-4478-BDAE-6634EFC2CA88}.Release|x86.Build.0 = Release|Win32
+		{47300C33-0C86-4916-85B7-DC00FAB27304}.Debug|x86.ActiveCfg = Debug|Win32
+		{47300C33-0C86-4916-85B7-DC00FAB27304}.Debug|x86.Build.0 = Debug|Win32
+		{47300C33-0C86-4916-85B7-DC00FAB27304}.Release|x86.ActiveCfg = Release|Win32
+		{47300C33-0C86-4916-85B7-DC00FAB27304}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

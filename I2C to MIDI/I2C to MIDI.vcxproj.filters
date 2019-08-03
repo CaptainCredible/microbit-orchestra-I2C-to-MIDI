@@ -17,4 +17,9 @@
   <ItemGroup>
     <None Include="I2C to MIDI.ino" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="__vm\.I2C to MIDI.vsarduino.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
 </Project>
