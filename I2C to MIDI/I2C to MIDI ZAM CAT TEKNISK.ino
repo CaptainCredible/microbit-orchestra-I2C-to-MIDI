@@ -147,6 +147,9 @@ void handle(int whot) {
 	if (whot >= 127) {  // Cat
 		int tempWhot = whot - 127;
 		MIDI.sendNoteOn(tempWhot , 127, 1);
+		Serial.println(" HWSERIAL ");
+		
+		Serial.println(tempWhot);
 		if ((millis() - lastCatTime) > 2) {
 			pixels.clear();
 		}
@@ -169,7 +172,7 @@ void handle(int whot) {
 		pixels.show();   // Send the updated pixel colors to the hardware.
 		HWnoteIsOn[tempWhot] = true;
 		HWnoteTimers[tempWhot] = millis();
-		//Serial.println(" HWSERIAL ");
+		
 		//delay(10);
 	//	softMidi.sendNoteOff(whot-127 , 127, 1);
 	}
@@ -181,12 +184,11 @@ void handle(int whot) {
 		
 		lastMumTime = millis();
 		int myChan = whot % 16;
-		if (mumIsVolcaSample) {
-			softMidi.sendNoteOn(whot, 127, myChan+1);
-		}
-		else if(mumIsVolcaBeats) {
-			softMidi.sendNoteOn(volcaBeatNotes[myChan], 127, 1);
-		}
+		
+			softMidi.sendNoteOn(myChan, 127, 1);
+			Serial.print("Sent SoftMIDI  ")
+			Serial.println(myChan)
+		
 		int tempPixel = (whot % 12) * 20;
 		
 		//pixels.setPixelColor(tempPixel, pixels.Color(tempPixel, 255, 255 - tempPixel));
