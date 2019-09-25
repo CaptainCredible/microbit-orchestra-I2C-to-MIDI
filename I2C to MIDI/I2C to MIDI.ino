@@ -1,5 +1,7 @@
+bool needToShowPixels = false;
 bool mumIsVolcaSample = false;
 bool mumIsVolcaBeats = false;
+bool neopixelEnabled = false;
 
 /*
  Name:		I2C_to_MIDI.ino
@@ -27,7 +29,7 @@ bool HWnoteIsOn[127] = { false, false, false, false, false, false, false, false,
 bool SWnoteIsOn[127] = { false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false };
 int midiOnTime = 20;
 
-#define NUMPIXELS 17
+#define NUMPIXELS 20
 #define neoPin 10
 byte myBrightness = 254;
 
@@ -52,28 +54,34 @@ void setup() {
 		digitalWrite(ledPin, LOW);
 		delay(100);
 	}
-	pixels.clear();
-	pixels.show();
+	if (neopixelEnabled) pixels.clear();
+	
+	if (neopixelEnabled) pixels.show();
 	
 	for (int i = 0; i < 150; i++) {
-		pixels.fill(pixels.Color(i, 0, 0));
-		pixels.show();
+		if (neopixelEnabled) pixels.fill(pixels.Color(i, 0, 0));
+		if (neopixelEnabled) pixels.show();
 		delay(3);
 	}
 	for (int i = 150; i > 0; i--) {
-		pixels.fill(pixels.Color(i, 0, 0));
-		pixels.show();
+		if (neopixelEnabled) pixels.fill(pixels.Color(i, 0, 0));
+		if (neopixelEnabled) pixels.show();
 		delay(3);
 	}
-	pixels.clear();
-	pixels.show();
+	if (neopixelEnabled) pixels.clear();
+	if (neopixelEnabled) pixels.show();
 }
 
 // the loop function runs over and over again until power down or reset
 void loop() {
 	//delay(1);
-	checkLedStrip(); //remember to turn off ledstrip pin
+	//checkLedStrip(); //remember to turn off ledstrip pin
 	handleNoteOffs(); //turn off notes
+	if (needToShowPixels) {
+		if (pixels.canShow()) pixels.show();
+		needToShowPixels = false;
+	}
+	
 }
 
 int ledStripPulseDuration = 20;
@@ -137,9 +145,9 @@ void handle(int whot) {
 	else {
 		port = 0;
 	}
-	//Serial.println(port);
-	//Serial.print(" selecter   note = ");
-	//Serial.println(whot);
+	Serial.println(port);
+	Serial.print(" selecter   note = ");
+	Serial.println(whot);
 	//if (digitalRead(portSelectPin) == HIGH) {
 	
 
@@ -166,7 +174,8 @@ void handle(int whot) {
 		//for (int i = 0; i < 6; i++) {
 		//	pixels.setPixelColor(i, pixels.Color(tempPixel, 255, 255 - tempPixel)); //2 pixels
 		//}
-		pixels.show();   // Send the updated pixel colors to the hardware.
+		needToShowPixels = true;
+		//pixels.show();   // Send the updated pixel colors to the hardware.
 		HWnoteIsOn[tempWhot] = true;
 		HWnoteTimers[tempWhot] = millis();
 		//Serial.println(" HWSERIAL ");
@@ -187,6 +196,9 @@ void handle(int whot) {
 		else if(mumIsVolcaBeats) {
 			softMidi.sendNoteOn(volcaBeatNotes[myChan], 127, 1);
 		}
+		else{
+			softMidi.sendNoteOn(whot, 127, 1);
+		}
 		int tempPixel = (whot % 12) * 20;
 		
 		//pixels.setPixelColor(tempPixel, pixels.Color(tempPixel, 255, 255 - tempPixel));
@@ -196,6 +208,7 @@ void handle(int whot) {
 				pixels.setPixelColor(i, pixels.Color(drumColoursR[myChan], drumColoursG[myChan], drumColoursB[myChan])); //2 pixels
 				myBrightness = 254;
 				pixels.setBrightness(myBrightness);
+				needToShowPixels = true;
 
 			}
 		}
@@ -204,6 +217,7 @@ void handle(int whot) {
 				pixels.setPixelColor(i, pixels.Color(drumColoursR[myChan], drumColoursG[myChan], drumColoursB[myChan])); //2 pixels
 				myBrightness = 254;
 				pixels.setBrightness(myBrightness);
+				needToShowPixels = true;
 
 			}
 		}
@@ -212,7 +226,7 @@ void handle(int whot) {
 				pixels.setPixelColor(i, pixels.Color(drumColoursR[myChan], drumColoursG[myChan], drumColoursB[myChan])); //2 pixels
 				myBrightness = 254;
 				pixels.setBrightness(myBrightness);
-
+				needToShowPixels = true;
 			}
 		}
 		
@@ -230,17 +244,18 @@ void handleNoteOffs() {
 	//interval++;
 	//if (interval == 1) {
 		//Serial.println(myBrightness);
-		if (myBrightness >= 2) {
-			myBrightness--;
-			pixels.setBrightness(myBrightness);
-			pixels.show();
+	
+	if (myBrightness >= 2) {
+			myBrightness-=2;
+	//		pixels.setBrightness(myBrightness);
+	//		needToShowPixels = true;
 			ledsAreOn = true;
 		}
 		else if (ledsAreOn) {
 			pixels.setBrightness(254);
 			pixels.clear();
-			pixels.show();
 			ledsAreOn = false;
+			needToShowPixels = true;
 		}
 		//interval = 0;
 	//}
